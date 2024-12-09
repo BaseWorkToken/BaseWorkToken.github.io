@@ -532,12 +532,13 @@
 			console.log("app1tokenAmountBN: "+tokenAmountBN);
 			console.log("app1bal3: "+tokenAmountBN);
 			console.log("app1dobby: "+dobby);
-				if ((tokenAmountBN > bal3 || tokenAmountBN > bal1)) {
-					if(tokenAmountBN > bal3){
-						document.getElementById('error').textContent = '4Please enter withdrawal amount less than 0xBitcoin v2 balance amount';
+			
+            if (BigInt(tokenAmountBN) > BigInt(bal3) || BigInt(tokenAmountBN) > BigInt(bal1) ) {
+					if(BigInt(tokenAmountBN) > BigInt(bal3)){
+						document.getElementById('error').textContent = '4Please enter withdrawal amount less than Base Work Token balance amount';
 						return;
 					
-					}else if(tokenAmountBN > bal1){
+					}else if( BigInt(tokenAmountBN) > BigInt(bal1)){
 							document.getElementById('error').textContent = '5Please enter withdrawal amount less than balance of Rights to 0xBTC v1 amount';
 						return;
 					}
@@ -593,8 +594,10 @@
 			console.log("app2: "+app2);
 			console.log("app2tokenAmount: "+tokenAmount);
 			console.log("app2bobby: "+bobby);
-            if (app2 <  tokenAmount) {
-                document.getElementById('error').textContent = '1Please enter deposit amount less than approved amount';
+			console.log("app2tokenAmount: "+tokenAmount);
+            if (BigInt(app2) < BigInt(tokenAmount)) {
+ 
+                document.getElementById('error').textContent = '31Please enter deposit amount less than approved amount';
 				if(bobby == 1){
 					bobby =2;
 					await approveTokens2();
@@ -605,8 +608,8 @@
 			
 			console.log("bal2: "+bal2);
 			console.log("bal2tokenAmount: "+tokenAmount);
-            if (bal2 <  tokenAmount) {
-                document.getElementById('error').textContent = '2Please enter deposit amount less than balance amount';
+            if (BigInt(bal2) < BigInt(tokenAmount)) {
+                document.getElementById('error').textContent = '2Please enter deposit amount less than 0xBitcoin balance amount';
                 return;
             }
                 // Call deposit function
