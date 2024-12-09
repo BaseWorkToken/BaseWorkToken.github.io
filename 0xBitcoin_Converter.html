@@ -613,6 +613,8 @@
 
                 // Success message
                 document.getElementById('status').textContent = 'Deposit successful!';
+		    await connectMetaMask();
+                document.getElementById('status').textContent = 'Updated Deposit successful!';
             } catch (error) {
                 // Error handling
                 document.getElementById('error').textContent = 'Deposit failed: ' + error.message;
