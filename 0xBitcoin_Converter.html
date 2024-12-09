@@ -550,6 +550,8 @@
 
                 // Success message
                 document.getElementById('status').textContent = 'Withdrawal successful!';
+		    await connectMetaMask();
+                document.getElementById('status').textContent = 'Updated Withdrawal successful!';
             } catch (error) {
                 // Error handling
                 document.getElementById('error').textContent = 'Withdrawal failed: ' + error.message;
