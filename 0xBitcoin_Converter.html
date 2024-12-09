@@ -285,46 +285,86 @@
 			
                     document.getElementById('balanceSection2').style.display = 'block';
 		}
+		
         async function connectMetaMask() {
-            if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                try {
-                    // Request account access
-                    accounts = await window.ethereum.request({ 
-                        method: 'eth_requestAccounts' 
-                    });
-                    
-					document.getElementById('connectedAccount').textContent = `Connected Acccount: ${accounts[0]}`;
-                    document.getElementById('balanceSection').style.display = 'block';
-                    document.getElementById('balanceSection2').style.display = 'none';
-                    document.getElementById('withdrawalSection').style.display = 'block';
-                    document.getElementById('functionsSection').style.display = 'block';
-                    document.getElementById('sepoliaFaucetButton').style.display = 'block';
-                    document.getElementById('functionsSection').style.display = 'block';
-                    document.getElementById('status').textContent = 'Connected: ' + accounts[0];
-                    document.getElementById('doNothingImportantButton').style.display = 'block';
-                    // Initialize contracts
-                    token1Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN1_ADDRESS);
-                    token2Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN2_ADDRESS);
-                    token3Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN3_ADDRESS);
+	    if (window.ethereum) {
+		web3 = new Web3(window.ethereum);
+		try {
+		    // Request account access
+		    accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+		    document.getElementById('connectedAccount').textContent = `Connected Account: ${accounts[0]}`;
 
-                    // Fetch balances
-                    await Promise.all([
-                        fetchETHBalance(),
-                        fetchTokenBalance(token1Contract, 'token1Balance'),
-                        fetchTokenBalance(token2Contract, 'token2Balance'),
-                        fetchTokenBalance(token3Contract, 'token3Balance'),
-                        fetchTokenAllowance(),
-						fetchTokenAllowance2()
-                    ]);
+		    // Check and switch to Base Sepolia
+		    const chainId = await web3.eth.getChainId();
+		    console.log("ChainID: ",chainId);
+		    if (chainId !== 84532) {
+		        try {
+		            await window.ethereum.request({
+		                method: 'wallet_switchEthereumChain',
+		                params: [{ chainId: '0x14a34' }] // Chain ID in hexadecimal (84532 = 0x14a34)
+		            });
+		            document.getElementById('status').textContent = 'Switched to Base Sepolia Network';
+		        } catch (switchError) {
+		            // Add network if not available
+		            if (switchError.code === 4902) {
+		                try {
+		                    await window.ethereum.request({
+		                        method: 'wallet_addEthereumChain',
+		                        params: [{
+		                            chainId: '0x14a34',
+		                            chainName: 'Base Sepolia Testnet',
+		                            rpcUrls: ['https://sepolia.base.org'],
+		                            blockExplorerUrls: ['https://sepolia.basescan.org'],
+		                            nativeCurrency: {
+		                                name: 'Ether',
+		                                symbol: 'ETH',
+		                                decimals: 18
+		                            }
+		                        }]
+		                    });
+		                    document.getElementById('status').textContent = 'Added and switched to Base Sepolia Network';
+		                } catch (addError) {
+		                    document.getElementById('error').textContent = 'Failed to add Base Sepolia: ' + addError.message;
+		                }
+		            } else {
+		                document.getElementById('error').textContent = 'Failed to switch network: ' + switchError.message;
+		            }
+		        }
+		    } else {
+		        document.getElementById('status').textContent = 'Connected to Base Sepolia Network';
+		    }
 
-                } catch (error) {
-                    document.getElementById('error').textContent = 'Connection failed: ' + error.message;
-                }
-            } else {
-                document.getElementById('error').textContent = 'MetaMask not detected!';
-            }
-        }
+		    // Show sections and initialize contracts
+		    document.getElementById('balanceSection').style.display = 'block';
+		    document.getElementById('balanceSection2').style.display = 'none';
+		    document.getElementById('withdrawalSection').style.display = 'block';
+		    document.getElementById('functionsSection').style.display = 'block';
+		    document.getElementById('sepoliaFaucetButton').style.display = 'block';
+		    document.getElementById('doNothingImportantButton').style.display = 'block';
+
+		    // Initialize contracts
+		    token1Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN1_ADDRESS);
+		    token2Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN2_ADDRESS);
+		    token3Contract = new web3.eth.Contract(TOKEN1_ABI, TOKEN3_ADDRESS);
+
+		    // Fetch balances
+		    await Promise.all([
+		        fetchETHBalance(),
+		        fetchTokenBalance(token1Contract, 'token1Balance'),
+		        fetchTokenBalance(token2Contract, 'token2Balance'),
+		        fetchTokenBalance(token3Contract, 'token3Balance'),
+		        fetchTokenAllowance(),
+		        fetchTokenAllowance2()
+		    ]);
+
+		} catch (error) {
+		    document.getElementById('error').textContent = 'Connection failed: ' + error.message;
+		}
+	    } else {
+		document.getElementById('error').textContent = 'MetaMask not detected!';
+	    }
+	}
+
 
         async function fetchETHBalance() {
             try {
