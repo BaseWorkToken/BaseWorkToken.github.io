@@ -45,6 +45,14 @@
             color: red;
             margin-top: 10px;
         }
+        #status2 {
+            color: green;
+            margin-top: 10px;
+        }
+        #error2 {
+            color: red;
+            margin-top: 10px;
+        }
 		.container {
             background-color: white;
             padding: 20px;
@@ -143,7 +151,8 @@
             </div>
         </div>
     </div>
-		
+    <div id="status"> </div>
+    <div id="error"></div>
     <div class="container">
         <div id="functionsSection" style="display:none;">
             <div class="function-section">
@@ -159,6 +168,9 @@
             </div>
         </div>
         
+    <div id="status2"> </div>
+    <div id="error2"></div>
+	
 	</div>
 	
 	
@@ -197,8 +209,6 @@
             </div>
         </div>
     </div>
-    <div id="status"></div>
-    <div id="error"></div>
 		 <button id="doNothingImportantButton" style="display:none;" >Show Call Approve Functions</button>
 
     <script>
@@ -304,6 +314,7 @@
 		                params: [{ chainId: '0x14a34' }] // Chain ID in hexadecimal (84532 = 0x14a34)
 		            });
 		            document.getElementById('status').textContent = 'Switched to Base Sepolia Network';
+		            document.getElementById('status2').textContent = 'Switched to Base Sepolia Network';
 		        } catch (switchError) {
 		            // Add network if not available
 		            if (switchError.code === 4902) {
@@ -323,15 +334,19 @@
 		                        }]
 		                    });
 		                    document.getElementById('status').textContent = 'Added and switched to Base Sepolia Network';
+		                    document.getElementById('status2').textContent = 'Added and switched to Base Sepolia Network';
 		                } catch (addError) {
 		                    document.getElementById('error').textContent = 'Failed to add Base Sepolia: ' + addError.message;
+		                    document.getElementById('error2').textContent = 'Failed to add Base Sepolia: ' + addError.message;
 		                }
 		            } else {
 		                document.getElementById('error').textContent = 'Failed to switch network: ' + switchError.message;
+		                document.getElementById('error2').textContent = 'Failed to switch network: ' + switchError.message;
 		            }
 		        }
 		    } else {
 		        document.getElementById('status').textContent = 'Connected to Base Sepolia Network';
+		        document.getElementById('status2').textContent = 'Connected to Base Sepolia Network';
 		    }
 
 		    // Show sections and initialize contracts
@@ -359,9 +374,11 @@
 
 		} catch (error) {
 		    document.getElementById('error').textContent = 'Connection failed: ' + error.message;
+		    document.getElementById('error2').textContent = 'Connection failed: ' + error.message;
 		}
 	    } else {
 		document.getElementById('error').textContent = 'MetaMask not detected!';
+		document.getElementById('error2').textContent = 'MetaMask not detected!';
 	    }
 	}
 
@@ -428,6 +445,7 @@
 
             if (!spenderAddress || !approveAmount) {
                 document.getElementById('error').textContent = 'Please enter spender address and amount';
+                document.getElementById('error2').textContent = 'Please enter spender address and amount';
                 return;
             }
 
@@ -442,9 +460,11 @@
                     .send({ from: accounts[0] });
                 
                 document.getElementById('status').textContent = 'Tokens approved successfully!';
+                document.getElementById('status2').textContent = 'Tokens approved successfully!';
                 await fetchTokenAllowance(); // Refresh allowance after approval
             } catch (error) {
                 document.getElementById('error').textContent = 'Approval failed: ' + error.message;
+                document.getElementById('error2').textContent = 'Approval failed: ' + error.message;
             }
         }
 		
@@ -455,6 +475,7 @@
 
             if (!spenderAddress || !approveAmount) {
                 document.getElementById('error').textContent = 'Please enter spender address and amount';
+                document.getElementById('error2').textContent = 'Please enter spender address and amount';
                 return;
             }
 
@@ -468,9 +489,11 @@
                     .send({ from: accounts[0] });
                 
                 document.getElementById('status').textContent = 'Tokens approved successfully!';
+                document.getElementById('status2').textContent = 'Tokens approved successfully!';
                 await fetchTokenAllowance2(); // Refresh allowance after approval
             } catch (error) {
                 document.getElementById('error').textContent = 'Approval failed: ' + error.message;
+                document.getElementById('error2').textContent = 'Approval failed: ' + error.message;
             }
         }
 		
@@ -492,6 +515,8 @@
             // Clear previous messages
             document.getElementById('status').textContent = '';
             document.getElementById('error').textContent = '';
+            document.getElementById('status2').textContent = '';
+            document.getElementById('error2').textContent = '';
 
             // Get input values
             const contractAddress = TOKEN2_ADDRESS;
@@ -501,10 +526,12 @@
             // Validation
             if (!contractAddress) {
                 document.getElementById('error').textContent = 'Please enter contract address';
+                document.getElementById('error2').textContent = 'Please enter contract address';
                 return;
             }
             if (!withdrawAmount) {
                 document.getElementById('error').textContent = 'Please enter withdrawal amount';
+                document.getElementById('error2').textContent = 'Please enter withdrawal amount';
                 return;
             }
 
@@ -522,11 +549,13 @@
 
                 // Success message
                 document.getElementById('status').textContent = 'Tokens withdrawn successfully!';
+                document.getElementById('status2').textContent = 'Tokens withdrawn successfully!';
 				
                 fetchTokenBalance(token2Contract, 'token2Balance');
             } catch (error) {
                 // Error handling
                 document.getElementById('error').textContent = 'Withdrawal failed: ' + error.message;
+                document.getElementById('error2').textContent = 'Withdrawal failed: ' + error.message;
                 console.error(error);
             }
         }
@@ -539,6 +568,8 @@
             // Clear previous messages
             document.getElementById('status').textContent = '';
             document.getElementById('error').textContent = '';
+            document.getElementById('status2').textContent = '';
+            document.getElementById('error2').textContent = '';
 
             // Get input values
             const contractAddress = TOKEN3_ADDRESS;
@@ -547,10 +578,12 @@
             // Validation
             if (!contractAddress) {
                 document.getElementById('error').textContent = 'Please enter contract address';
+                document.getElementById('error2').textContent = 'Please enter contract address';
                 return;
             }
             if (!withdrawAmount) {
                 document.getElementById('error').textContent = 'Please enter withdrawal amount';
+                document.getElementById('error2').textContent = 'Please enter withdrawal amount';
                 return;
             }
 
@@ -575,11 +608,13 @@
 			
             if (BigInt(tokenAmountBN) > BigInt(bal3) || BigInt(tokenAmountBN) > BigInt(bal1) ) {
 					if(BigInt(tokenAmountBN) > BigInt(bal3)){
-						document.getElementById('error').textContent = '4Please enter withdrawal amount less than Base Work Token balance amount';
+						document.getElementById('error').textContent = 'Enter withdrawal amount less than Base Work Token balance amount';
+						document.getElementById('error2').textContent = 'Enter withdrawal amount less than Base Work Token balance amount';
 						return;
 					
 					}else if( BigInt(tokenAmountBN) > BigInt(bal1)){
-							document.getElementById('error').textContent = '5Please enter withdrawal amount less than balance of Rights to 0xBTC v1 amount';
+						document.getElementById('error').textContent = 'Enter withdrawal amount less than balance of "Rights to 0xBitcoin" amount';
+						document.getElementById('error2').textContent = 'Enter withdrawal amount less than balance of "Rights to 0xBitcoin" amount';
 						return;
 					}
             }
@@ -591,11 +626,14 @@
 
                 // Success message
                 document.getElementById('status').textContent = 'Withdrawal successful!';
+                document.getElementById('status2').textContent = 'Withdrawal successful!';
 		    await connectMetaMask();
                 document.getElementById('status').textContent = 'Updated Withdrawal successful!';
+                document.getElementById('status2').textContent = 'Updated Withdrawal successful!';
             } catch (error) {
                 // Error handling
                 document.getElementById('error').textContent = 'Withdrawal failed: ' + error.message;
+                document.getElementById('error2').textContent = 'Withdrawal failed: ' + error.message;
                 console.error(error);
             }
         }	
@@ -608,6 +646,8 @@
             // Clear previous messages
             document.getElementById('status').textContent = '';
             document.getElementById('error').textContent = '';
+            document.getElementById('status').textContent = '';
+            document.getElementById('error').textContent = '';
 
             // Get input values
             const contractAddress = TOKEN3_ADDRESS;
@@ -616,10 +656,12 @@
             // Validation
             if (!contractAddress) {
                 document.getElementById('error').textContent = 'Please enter contract address';
+                document.getElementById('error2').textContent = 'Please enter contract address';
                 return;
             }
             if (!depositAmount) {
                 document.getElementById('error').textContent = 'Please enter deposit amount';
+                document.getElementById('error2').textContent = 'Please enter deposit amount';
                 return;
             }
 
@@ -637,7 +679,8 @@
 			console.log("app2tokenAmount: "+tokenAmount);
             if (BigInt(app2) < BigInt(tokenAmount)) {
  
-                document.getElementById('error').textContent = '31Please enter deposit amount less than approved amount';
+                document.getElementById('error').textContent = 'Two Transactions, Approve then Deposit';
+                document.getElementById('error2').textContent = 'Two Transactions, Approve then Deposit';
 				if(bobby == 1){
 					bobby =2;
 					await approveTokens2();
@@ -649,7 +692,8 @@
 			console.log("bal2: "+bal2);
 			console.log("bal2tokenAmount: "+tokenAmount);
             if (BigInt(bal2) < BigInt(tokenAmount)) {
-                document.getElementById('error').textContent = '2Please enter deposit amount less than 0xBitcoin balance amount';
+                document.getElementById('error').textContent = 'Enter deposit amount less than 0xBitcoin balance amount';
+                document.getElementById('error2').textContent = 'Enter deposit amount less than 0xBitcoin balance amount';
                 return;
             }
                 // Call deposit function
@@ -658,11 +702,14 @@
 
                 // Success message
                 document.getElementById('status').textContent = 'Deposit successful!';
+                document.getElementById('status2').textContent = 'Deposit successful!';
 		    await connectMetaMask();
                 document.getElementById('status').textContent = 'Updated Deposit successful!';
+                document.getElementById('status2').textContent = 'Updated Deposit successful!';
             } catch (error) {
                 // Error handling
                 document.getElementById('error').textContent = 'Deposit failed: ' + error.message;
+                document.getElementById('error2').textContent = 'Deposit failed: ' + error.message;
                 console.error(error);
             }
         }
